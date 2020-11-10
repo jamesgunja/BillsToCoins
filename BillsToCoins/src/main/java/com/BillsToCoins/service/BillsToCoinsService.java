@@ -3,6 +3,8 @@ package com.BillsToCoins.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.BillsToCoins.exception.BillsToCoinsException;
@@ -11,6 +13,8 @@ import com.BillsToCoins.utility.Helper;
 
 @Service
 public class BillsToCoinsService {
+
+	private static final Logger logger = LoggerFactory.getLogger(BillsToCoinsService.class);
 
 	private int numQuarters = 0;
 	private int numDimes = 0;
@@ -26,7 +30,7 @@ public class BillsToCoinsService {
 
 		int centsLeft = Helper.convertDollartoCents(bill);
 
-		System.out.println(
+		logger.info(
 				"Bill Amount: " + bill + " Cents Required:  " + centsLeft + " Cents in System:  " + getCentsInSystem());
 
 		if (!areThereEnoughCoins(centsLeft))
@@ -85,8 +89,8 @@ public class BillsToCoinsService {
 	public Map<String, Integer> calculateMostAmountOfCoins(int bill) throws BillsToCoinsException {
 
 		int centsLeft = Helper.convertDollartoCents(bill);
-		System.out.println(
-				"Bill Amount:  " + bill + " Cents Required:  " + centsLeft + " Cents in System:  " + getCentsInSystem());
+		logger.info("Bill Amount:  " + bill + " Cents Required:  " + centsLeft + " Cents in System:  "
+				+ getCentsInSystem());
 
 		if (!areThereEnoughCoins(centsLeft))
 			throw new BillsToCoinsException("Not Enough Coins");
@@ -143,11 +147,19 @@ public class BillsToCoinsService {
 	}
 
 	public void displayCoins() {
-		System.out.println(" Quarters = " + numQuarters + "  Quarters Left in System:  " + quarterCounter);
-		System.out.println(" Dimes    = " + numDimes + "  Dimes Left in System:  " + dimesCounter);
-		System.out.println(" Nickels  = " + numNickels + "  Nickels Left in System:  " + nickelsCounter);
-		System.out.println(" Pennies  = " + numPennies + "  Pennies Left in System:  " + penniesCounter);
-		System.out.println();
+		logger.info(" Quarters = " + numQuarters + "  Quarters Left in System:  " + quarterCounter);
+		logger.info(" Dimes    = " + numDimes + "  Dimes Left in System:  " + dimesCounter);
+		logger.info(" Nickels  = " + numNickels + "  Nickels Left in System:  " + nickelsCounter);
+		logger.info(" Pennies  = " + numPennies + "  Pennies Left in System:  " + penniesCounter);
+
+	}
+
+	public void displayConfiguredCoins() {
+		logger.info("Coins Setup in System");
+		logger.info("Quarters  " + getQuarterCounter());
+		logger.info("Dimes  " + getDimesCounter());
+		logger.info("Nickels  " + getNickelsCounter());
+		logger.info("Pennies  " + getPenniesCounter());
 
 	}
 
@@ -191,7 +203,7 @@ public class BillsToCoinsService {
 	}
 
 	public int getCentsInSystem() {
-		 centsInSystem = (quarterCounter * 25) + (dimesCounter * 10) + (nickelsCounter * 5) + (penniesCounter * 1);
+		centsInSystem = (quarterCounter * 25) + (dimesCounter * 10) + (nickelsCounter * 5) + (penniesCounter * 1);
 		return centsInSystem;
 	}
 
