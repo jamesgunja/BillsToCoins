@@ -2,6 +2,8 @@ package com.BillsToCoins;
 
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +14,9 @@ import com.BillsToCoins.utility.Validations;
 
 @SpringBootApplication
 public class BillsToCoinsApplication {
+	
+	   private static final Logger logger = LoggerFactory.getLogger(BillsToCoinsApplication.class);
+
 
 	static boolean validState = true;
 
@@ -32,56 +37,61 @@ public class BillsToCoinsApplication {
 			System.out.println("Please enter a option!");
 
 			while (!input.hasNext("[1234]")) {
-				System.out.println("That's not a option!");
+				logger.info("That's not a option!");
 				input.next();
 			}
 			int option = input.nextInt();
 			switch (option) {
 
 			case 1:
-				System.out.println("Default coins Setup");
-				System.out.println("Quarters  " + billsToCoinsService.getQuarterCounter());
-				System.out.println("Dimes  " + billsToCoinsService.getDimesCounter());
-				System.out.println("Nickels  " + billsToCoinsService.getNickelsCounter());
-				System.out.println("Pennies  " + billsToCoinsService.getPenniesCounter());
+				
+				billsToCoinsService.displayConfiguredCoins();
+				
+				int quarterInput;
+				do {
+				    System.out.println("Enter Quarters in System. Please enter a positive number!");
+				    while (!input.hasNextInt()) {
+				        logger.info("That's not a number!");
+				        input.next();
+				    }
+				    quarterInput = input.nextInt();
+				} while (quarterInput <= 0);
+				billsToCoinsService.setQuarterCounter(quarterInput);
 
-				System.out.println("Enter Quarters in System\n");
-				try {
-					int quarterInput = Integer.parseInt(input.nextLine());
-					billsToCoinsService.setQuarterCounter(quarterInput);
-				} catch (NumberFormatException ex) {
-					throw new BillsToCoinsException("Wrong Input");
-				}
+				int dimesInput;
+				do {
+				    System.out.println("Enter Dimes in System. Please enter a positive number!");
+				    while (!input.hasNextInt()) {
+				        logger.info("That's not a number!");
+				        input.next();
+				    }
+				    dimesInput = input.nextInt();
+				} while (dimesInput <= 0);
+				billsToCoinsService.setDimesCounter(dimesInput);
 
-				System.out.println("Enter Dimes in System\n");
-				try {
-					int dimesInput = Integer.parseInt(input.nextLine());
-					billsToCoinsService.setDimesCounter(dimesInput);
-				} catch (NumberFormatException ex) {
-					throw new BillsToCoinsException("Wrong Input");
-				}
-
-				try {
-					System.out.println("Enter Nickels in System\n");
-					int nickelInput = Integer.parseInt(input.nextLine());
-
-					billsToCoinsService.setNickelsCounter(nickelInput);
-				} catch (NumberFormatException ex) {
-					throw new BillsToCoinsException("Wrong Input");
-				}
-
-				try {
-					System.out.println("Enter Pennies in System\n");
-					int penniesInput = Integer.parseInt(input.nextLine());
-
-					billsToCoinsService.setPenniesCounter(penniesInput);
-				} catch (NumberFormatException ex) {
-					throw new BillsToCoinsException("Wrong Input");
-				}
-				System.out.println("Quarters  " + billsToCoinsService.getQuarterCounter());
-				System.out.println("Dimes  " + billsToCoinsService.getDimesCounter());
-				System.out.println("Nickels  " + billsToCoinsService.getNickelsCounter());
-				System.out.println("Pennies  " + billsToCoinsService.getPenniesCounter());
+				int nickelInput;
+				do {
+				    System.out.println("Enter Nickel in System. Please enter a positive number!");
+				    while (!input.hasNextInt()) {
+				        logger.info("That's not a number!");
+				        input.next();
+				    }
+				    nickelInput = input.nextInt();
+				} while (nickelInput <= 0);
+				billsToCoinsService.setNickelsCounter(nickelInput);
+				
+				int penniesInput;
+				do {
+				    System.out.println("Enter Pennies in System. Please enter a positive number!");
+				    while (!input.hasNextInt()) {
+				        logger.info("That's not a number!");
+				        input.next();
+				    }
+				    penniesInput = input.nextInt();
+				} while (nickelInput <= 0);
+				billsToCoinsService.setPenniesCounter(penniesInput);
+				
+				billsToCoinsService.displayConfiguredCoins();
 
 				break;
 
@@ -115,7 +125,7 @@ public class BillsToCoinsApplication {
 
 			case 4:
 				validState = false;
-				System.out.println("Exit");
+				logger.info("Exit");
 				break;
 
 			}
